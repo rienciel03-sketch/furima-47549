@@ -18,7 +18,6 @@
 
 |Column           |Type       |Options               |
 |-----------------|---------  |--------------------  |
-|image            |text       |null:false            |
 |name             |string     |null:false            |
 |introduction     |text       |null:false            |
 |category_id      |integer    |null:false            |
@@ -27,7 +26,7 @@
 |prefecture_id    |integer    |null:false            |
 |shipping_time_id |integer    |null:false            |
 |price            |integer    |null:false            |
-|user             |references|null:false,foreign key|
+|user             |references |null:false,foreign key|
 
 belongs_to :user
 has_one :purchase_record
@@ -36,11 +35,13 @@ has_one :purchase_record
 
 |Column           |Type      |Options               |
 |-----------------|--------  |--------------------  |
-|item             |references|null:false,foreign key|
 |user             |references|null:false,foreign key|
+|item             |references|null:false,foreign key|
 
 belongs_to :item
 belongs_to :user
+has_one :address
+
 
 
 #addressesテーブル
@@ -55,4 +56,4 @@ belongs_to :user
 |phone_number     |string    |null:false            |
 |purchase_record  |references|null:false,foreign key|
 
-has_one :purchase_record
+belongs_to :purchase_record
