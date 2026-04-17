@@ -6,7 +6,7 @@
 |email               |string   |null:false,unique:true|
 |encrypted_password  |string   |null:false            |
 |family_name         |string   |null:false            |
-|first_name          |string   |null.false            |
+|first_name          |string   |null:false            |
 |family_name_kana    |string   |null:false            |
 |first_name_kana     |string   |null:false            |
 |birth_day           |date     |null:false            |
@@ -16,21 +16,21 @@
 
 #itemsテーブル
 
-|Column           |Type      |Options               |
-|-----------------|--------  |--------------------  |
-|image            |text      |null:false            |
-|name             |string    |null:false            |
-|introduction     |text      |null:false            |
-|category         |text      |null:false            |
-|condition        |text      |null.false            |
-|shipping-cost    |string    |null:false            |
-|shipping-from    |string    |null:false            |
-|shipping-time    |string    |null:false            |
-|price            |string    |null:false            |
+|Column           |Type       |Options               |
+|-----------------|---------  |--------------------  |
+|image            |text       |null:false            |
+|name             |string     |null:false            |
+|introduction     |text       |null:false            |
+|category_id      |integer    |null:false            |
+|condition_id     |integer    |null:false            |
+|shipping_cost_id |integer    |null:false            |
+|prefecture_id    |integer    |null:false            |
+|shipping_time_id |integer    |null:false            |
+|price            |integer    |null:false            |
 |user             |references|null:false,foreign key|
 
-be_longs_to :users
-has_one :purchase_records
+belongs_to :user
+has_one :purchase_record
 
 #purchase_recordsテーブル
 
@@ -39,8 +39,8 @@ has_one :purchase_records
 |item             |references|null:false,foreign key|
 |user             |references|null:false,foreign key|
 
-be_longs_to :items
-be_longs_to :users
+belongs_to :item
+belongs_to :user
 
 
 #addressesテーブル
@@ -48,11 +48,11 @@ be_longs_to :users
 |Column           |Type      |Options               |
 |-----------------|--------  |--------------------  |
 |postcode         |string    |null:false            |
-|prefecture       |string    |null:false            |
-|minicipality     |string    |null:false            |
+|prefecture_id    |integer   |null:false            |
+|municipality     |string    |null:false            |
 |address          |string    |null:false            |
-|building-name    |string    |                      |
-|phone-number     |string    |null:false            |
-|user             |references|null:false,foreign key|
+|building_name    |string    |                      |
+|phone_number     |string    |null:false            |
+|purchase_record  |references|null:false,foreign key|
 
-has_one :purchase_records
+has_one :purchase_record
