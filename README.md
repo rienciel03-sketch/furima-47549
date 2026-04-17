@@ -1,24 +1,58 @@
-# README
+#usersテーブル
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+|Column              |Type     |Options               |
+|--------------------|-------- |--------------------  |
+|nickname            |string   |null:false            |
+|email               |string   |null:false,unique:true|
+|encrypted_password  |string   |null:false            |
+|family_name         |string   |null:false            |
+|first_name          |string   |null.false            |
+|family_name_kana    |string   |null:false            |
+|first_name_kana     |string   |null:false            |
+|birth_day           |date     |null:false            |
 
-Things you may want to cover:
+ has_many :items
+ has_many :purchase_records
 
-* Ruby version
+#itemsテーブル
 
-* System dependencies
+|Column           |Type      |Options               |
+|-----------------|--------  |--------------------  |
+|image            |text      |null:false            |
+|name             |string    |null:false            |
+|introduction     |text      |null:false            |
+|category         |text      |null:false            |
+|condition        |text      |null.false            |
+|shipping-cost    |string    |null:false            |
+|shipping-from    |string    |null:false            |
+|shipping-time    |string    |null:false            |
+|price            |string    |null:false            |
+|user             |references|null:false,foreign key|
 
-* Configuration
+be_longs_to :users
+has_one :purchase_records
 
-* Database creation
+#purchase_recordsテーブル
 
-* Database initialization
+|Column           |Type      |Options               |
+|-----------------|--------  |--------------------  |
+|item             |references|null:false,foreign key|
+|user             |references|null:false,foreign key|
 
-* How to run the test suite
+be_longs_to :items
+be_longs_to :users
 
-* Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
+#addressesテーブル
 
-* ...
+|Column           |Type      |Options               |
+|-----------------|--------  |--------------------  |
+|postcode         |string    |null:false            |
+|prefecture       |string    |null:false            |
+|minicipality     |string    |null:false            |
+|address          |string    |null:false            |
+|building-name    |string    |                      |
+|phone-number     |string    |null:false            |
+|user             |references|null:false,foreign key|
+
+has_one :purchase_records
