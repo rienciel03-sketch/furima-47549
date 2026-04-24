@@ -40,8 +40,8 @@ RSpec.describe User, type: :model do
       expect(@user.errors.full_messages).to include("Password can't be blank")
     end
     it 'passwordが5文字以下では保存できない' do
-      @user.password = '1234'
-      @user.password_confirmation = '1234'
+      @user.password = '12ab'
+      @user.password_confirmation = '12ab'
       @user.valid?  
       expect(@user.errors.full_messages).to include('Password is too short (minimum is 6 characters)')
     end
@@ -57,12 +57,25 @@ RSpec.describe User, type: :model do
       @user.valid?
       expect(@user.errors.full_messages).to include("Password confirmation doesn't match Password")
     end
-    it 'passwordが半角英数字混合でない場合は保存できない' do
-      @user.password = 'aaaaaa'
+    it '数字のみのpasswordは保存できない' do
+      @user.password = '123456'
       @user.password_confirmation = 'password'
       @user.valid?  
-      expect(@user.errors.full_messages).to include("Password confirmation doesn't match Password")
+      expect(@user.errors.full_messages).to include("Password には英数字の混合である必要があります")
     end
+    it '英字のみのpasswordは保存できない' do
+      @user.password = 'aaaaaa'
+      @user.password_confirmation = 'password'
+      @user.valid?
+      expect(@user.errors.full_messages).to include("Password には英数字の混合である必要があります")
+    end
+    it  '全角を含むpasswordの場合は保存できない' do
+      @user.password = 'ａａa １１1'
+      @user.password_confirmation = 'password'
+      @user.valid?
+      expect(@user.errors.full_messages).to include("Password には英数字の混合である必要があります")
+    end
+
     it 'last_nameが空では保存できない' do 
       @user.last_name = ''
       @user.valid?
