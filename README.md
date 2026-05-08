@@ -29,9 +29,9 @@
 |user             |references |null:false,foreign key|
 
 belongs_to :user
-has_one :purchase_record
+has_one :order
 
-#purchase_recordsテーブル
+#orderテーブル
 
 |Column           |Type      |Options               |
 |-----------------|--------  |--------------------  |
@@ -54,6 +54,6 @@ has_one :address
 |address          |string    |null:false            |
 |building_name    |string    |                      |
 |phone_number     |string    |null:false            |
-|purchase_record  |references|null:false,foreign key|
+|order            |references|null:false,foreign key|
 
-belongs_to :purchase_record
+belongs_to :order
