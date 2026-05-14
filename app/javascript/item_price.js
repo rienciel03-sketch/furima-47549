@@ -4,6 +4,10 @@
 const price = () => {
 
   const priceInput = document.getElementById("item-price");
+  // 要素が存在しない場合は、ここで処理を終了させる（ガード句）
+  if (!priceInput) {
+    return null;
+  }
   priceInput.addEventListener("input", () => {
     const inputValue = priceInput.value;
     const addTaxDom = document.getElementById("add-tax-price");
@@ -17,4 +21,3 @@ const price = () => {
 
 window.addEventListener('turbo:load', price);
 window.addEventListener('turbo:render', price);
-
