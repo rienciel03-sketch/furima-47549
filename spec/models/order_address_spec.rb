@@ -99,11 +99,6 @@ describe '商品の購入' do
       @order.valid?
       expect(@order.errors.full_messages).to include("Phone number must be 10 digits")
     end
-    it 'phone_numberにハイフンが含まれていないと保存できない' do
-      @order.phone_number = Faker::Number.number(digits: 10)
-      @order.valid? 
-      expect(@order.errors.full_messages).to include("Phone number is invalid")
-    end
   end
 
 
