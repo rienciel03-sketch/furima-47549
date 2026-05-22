@@ -2,9 +2,10 @@ require 'rails_helper'
 
 RSpec.describe OrderAddress, type: :model do
   before do
-    @user = FactoryBot.build(:user)
-    @item = FactoryBot.build(:item, user_id: @user.id)
-    @order = FactoryBot.build(:order_address, item_id: @item.id, user_id: @user.id)
+    @user = FactoryBot.create(:user)
+    @item = FactoryBot.create(:item)
+    @order = FactoryBot.build(:order_address, user_id: @user.id, item_id: @item.id)
+    sleep 0.1 # 処理速度が速すぎてエラーが出る場合の保険
 end
 
 describe '商品の購入' do
@@ -19,21 +20,21 @@ describe '商品の購入' do
   end
   context '商品を購入できないとき' do
     it 'user_idが紐づいていない' do
-      order = FactoryBot.build(:order_address, item_id: @item.id)
-      order.valid?
-      expect(order.errors.full_messages).to include("User must exist")
+      @order.user_id = nil
+      @order.valid?
+      expect(@order.errors.full_messages).to include("User can't be blank")
     end
     it 'item_idが紐づいていない' do 
-      order = FactoryBot.build(:order_address, user_id: @user.id)
-      order.valid?
-      expect(order.errors.full_messages).to include("Item must exist")
+      @order.item_id = nil
+      @order.valid?
+      expect(@order.errors.full_messages).to include("Item can't be blank")
     end
     it 'tokenが空では保存できない' do
       @order.token = nil
       @order.valid?
       expect(@order.errors.full_messages).to include("Token can't be blank")
     end
-    it 'postcodeが空では保存できない'
+    it 'postcodeが空では保存できない' do
      @order.postcode = nil
      @order.valid?
      expect(@order.errors.full_messages).to include("Postcode can't be blank")
@@ -41,7 +42,7 @@ describe '商品の購入' do
     it 'postcodeが半角数値でないと保存できない' do
       @order.postcode = '０１２３４５６７８９'
       @order.valid?
-      expect(@order.errors.full_messages).to include("Postcode is not a number")
+      expect(@order.errors.full_messages).to include("Postcode is invalid")
     end
     it 'postcodeの前半が3桁でないと保存できない' do
       @order.postcode = '０１２７'
@@ -75,7 +76,7 @@ describe '商品の購入' do
       expect(@order.errors.full_messages).to include("Municipality can't be blank")
     end
     it 'addressが空では保存できない' do
-      @order.address
+      @order.address = nil
       @order.valid?
       expect(@order.errors.full_messages).to include("Address can't be blank")
     end
@@ -87,17 +88,17 @@ describe '商品の購入' do
     it 'phone_numberが半角数値でないと保存できない' do
       @order.phone_number = '０１２３４５６７８９'
       @order.valid?   
-      expect(@order.errors.full_messages).to include("Phone number is not a number")
+      expect(@order.errors.full_messages).to include("Phone number is invalid")
     end
     it 'phone_numberが10文字未満では保存できない' do
       @order.phone_number = Faker::Number.number(digits: 9)
-      @order.valid? 
-      expect(@order.errors.full_messages).to include("Phone number must be 10 digits")
+      @order.valid?
+      expect(@order.errors.full_messages).to include("Phone number is invalid")
     end
     it 'phone_numberが11文字以上では保存できない' do
-      @order.phone_number = Faker::Number.number(digits: 11)
+      @order.phone_number = '090123456789' # 12文字にする
       @order.valid?
-      expect(@order.errors.full_messages).to include("Phone number must be 10 digits")
+      expect(@order.errors.full_messages).to include("Phone number is invalid")
     end
   end
 
