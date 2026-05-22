@@ -4,21 +4,18 @@ class OrdersController < ApplicationController
   before_action :prevent_self_purchase, only: [:index, :create]
 
   def index
+    gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
     @orderaddress = OrderAddress.new
   end
 
   def create
     @orderaddress = OrderAddress.new(order_params)
     if @orderaddress.valid?
-      Payjp.api_key = ""
-      Payjp::Charge.create(
-        amount: @item.price,
-        card: order_params[:token],
-        currency: "jpy"
-      )
+      pay_item 
       @orderaddress.save
       redirect_to root_path
     else
+      gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
       render :index, status: :unprocessable_entity
     end
   end
@@ -37,9 +34,20 @@ class OrdersController < ApplicationController
     )
   end
 
+  def pay_item
+    Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
+    Payjp::Charge.create(
+        amount: @item.price,
+        card: order_params[:token],
+        currency: "jpy"
+      )
+  end
+
+
   def prevent_self_purchase
     if current_user.id == @item.user_id || @item.order.present?
       redirect_to root_path
     end
   end
 end
+
