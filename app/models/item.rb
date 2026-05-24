@@ -7,7 +7,7 @@ class Item < ApplicationRecord
  belongs_to :shipping_cost
  belongs_to :prefecture
  belongs_to :shipping_time
- #has_one :purchase_record
+ has_one :order
 
  validates :image, presence: true
  validates :name, presence: true
